@@ -11,6 +11,7 @@ interface DetectedPaths {
   claude: string;
   codex: string;
   gemini: string;
+  copilot: string;
   gws: string;
   gcloud: string;
   gh: string;
@@ -22,7 +23,7 @@ export const CLIPathsSection = ({ appSettings, onSaveAppSettings }: CLIPathsSect
   const [detectedPaths, setDetectedPaths] = useState<DetectedPaths | null>(null);
   const [newPath, setNewPath] = useState('');
   const [localPaths, setLocalPaths] = useState<CLIPaths>(
-    appSettings.cliPaths || { claude: '', codex: '', gemini: '', gws: '', gcloud: '', gh: '', node: '', additionalPaths: [] }
+appSettings.cliPaths || { claude: '', codex: '', gemini: '', copilot: '', gws: '', gcloud: '', gh: '', node: '', additionalPaths: [] }
   );
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export const CLIPathsSection = ({ appSettings, onSaveAppSettings }: CLIPathsSect
         if (!updatedPaths.claude && paths.claude) updatedPaths.claude = paths.claude;
         if (!updatedPaths.codex && paths.codex) updatedPaths.codex = paths.codex;
         if (!updatedPaths.gemini && paths.gemini) updatedPaths.gemini = paths.gemini;
+        if (!updatedPaths.copilot && paths.copilot) updatedPaths.copilot = paths.copilot;
         if (!updatedPaths.gws && paths.gws) updatedPaths.gws = paths.gws;
         if (!updatedPaths.gcloud && paths.gcloud) updatedPaths.gcloud = paths.gcloud;
         if (!updatedPaths.gh && paths.gh) updatedPaths.gh = paths.gh;

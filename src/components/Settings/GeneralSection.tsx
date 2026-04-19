@@ -41,7 +41,7 @@ export const GeneralSection = ({ info, appSettings, onSaveAppSettings }: General
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [downloadPercent, setDownloadPercent] = useState(0);
-  const [installedProviders, setInstalledProviders] = useState<Record<string, boolean>>({ claude: true, codex: true, gemini: true });
+  const [installedProviders, setInstalledProviders] = useState<Record<string, boolean>>({ claude: true, codex: true, gemini: true, copilot: false });
 
   useEffect(() => {
     window.electronAPI?.cliPaths?.detect().then((paths) => {
@@ -50,6 +50,7 @@ export const GeneralSection = ({ info, appSettings, onSaveAppSettings }: General
           claude: !!paths.claude,
           codex: !!paths.codex,
           gemini: !!paths.gemini,
+          copilot: !!paths.copilot,
         });
       }
     });
@@ -321,6 +322,9 @@ export const GeneralSection = ({ info, appSettings, onSaveAppSettings }: General
           </option>
           <option value="gemini" disabled={!installedProviders.gemini}>
             Gemini{!installedProviders.gemini ? ' (not installed)' : ''}
+          </option>
+          <option value="copilot" disabled={!installedProviders.copilot}>
+            Copilot{!installedProviders.copilot ? ' (not installed)' : ''}
           </option>
         </select>
       </div>
