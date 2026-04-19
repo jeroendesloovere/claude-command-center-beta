@@ -7,6 +7,18 @@ if [[ "${OSTYPE:-}" != darwin* ]]; then
   exit 1
 fi
 
+ARCH="$(uname -m)"
+if [[ "$ARCH" == "arm64" ]]; then
+  echo "Apple Silicon (M1/M2/M3) detected - using arm64 architecture"
+  export npm_config_arch=arm64
+elif [[ "$ARCH" == "x86_64" ]]; then
+  echo "Intel Mac detected - using x64 architecture"
+  export npm_config_arch=x64
+else
+  echo "Unknown architecture: $ARCH"
+  exit 1
+fi
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="$(mktemp -d /tmp/samins-command-center-build.XXXXXX)"
 INSTALL_DIR="/Applications"
@@ -48,9 +60,12 @@ if [[ ! -w "$INSTALL_DIR" ]]; then
 fi
 
 if [[ "$SKIP_NPM_INSTALL" -eq 0 ]]; then
-  echo "Installing root dependencies..."
-  (cd "$ROOT_DIR" && npm install)
+  echo "Installing root dependencies for $ARCH..."
+  (cd "$ROOT_DIR" && npm_config_arch=${npm_config_arch} npm install)
 fi
+
+echo "Rebuilding native modules for $ARCH..."
+(cd "$ROOT_DIR" && npm_config_arch=${npm_config_arch} npx @electron/rebuild)
 
 echo "Preparing temporary build environment..."
 ln -s "$ROOT_DIR" "$BUILD_DIR/app"
