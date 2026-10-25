@@ -15,6 +15,7 @@ const PROVIDER_CONFIG: Record<string, {
   claude: { label: 'Claude', icon: '/claude-ai-icon.webp' },
   codex: { label: 'ChatGPT', icon: '/chatgpt-icon.webp' },
   gemini: { label: 'Gemini', icon: GeminiLogo },
+  copilot: { label: 'GitHub Copilot', icon: '/claude-ai-icon.webp' },
 };
 
 interface ProviderBadgeProps {

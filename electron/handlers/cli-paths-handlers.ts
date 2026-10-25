@@ -20,9 +20,9 @@ export interface CLIPathsHandlerDependencies {
 /**
  * Detect CLI paths from the system
  */
-async function detectCLIPaths(): Promise<{ claude: string; codex: string; gemini: string; gws: string; gcloud: string; gh: string; node: string }> {
+async function detectCLIPaths(): Promise<{ claude: string; codex: string; gemini: string; copilot: string; gws: string; gcloud: string; gh: string; node: string }> {
   const homeDir = os.homedir();
-  const paths = { claude: '', codex: '', gemini: '', gws: '', gcloud: '', gh: '', node: '' };
+  const paths = { claude: '', codex: '', gemini: '', copilot: '', gws: '', gcloud: '', gh: '', node: '' };
 
   // Common locations to check
   const commonPaths = [
@@ -107,6 +107,29 @@ async function detectCLIPaths(): Promise<{ claude: string; codex: string; gemini
       });
       if (stdout.trim()) {
         paths.gemini = stdout.trim();
+      }
+    } catch {
+      // Ignore
+    }
+  }
+
+  // Check for copilot
+  for (const dir of commonPaths) {
+    const copilotPath = path.join(dir, 'copilot');
+    if (fs.existsSync(copilotPath)) {
+      paths.copilot = copilotPath;
+      break;
+    }
+  }
+
+  // Try which command for copilot
+  if (!paths.copilot) {
+    try {
+      const { stdout } = await execAsync('which copilot', {
+        env: { ...process.env, PATH: `${commonPaths.join(':')}:${process.env.PATH}` },
+      });
+      if (stdout.trim()) {
+        paths.copilot = stdout.trim();
       }
     } catch {
       // Ignore
@@ -289,7 +312,7 @@ export function registerCLIPathsHandlers(deps: CLIPathsHandlerDependencies): voi
   // Get CLI paths from app settings
   ipcMain.handle('cliPaths:get', async () => {
     const settings = getAppSettings();
-    return settings.cliPaths || { claude: '', codex: '', gemini: '', gws: '', gcloud: '', gh: '', node: '', additionalPaths: [] };
+    return settings.cliPaths || { claude: '', codex: '', gemini: '', copilot: '', gws: '', gcloud: '', gh: '', node: '', additionalPaths: [] };
   });
 
   // Save CLI paths

@@ -21,7 +21,11 @@
     "electron:release:mac": "node scripts/build-electron.mjs --mac --config scripts/electron-builder.release.cjs",
     "electron:release:win": "node scripts/build-electron.mjs --win --config scripts/electron-builder.release.cjs",
     "electron:pack": "node scripts/build-electron.mjs --dir --mac",
-    "electron:install:mac": "bash scripts/install-mac-app.sh"
+    "electron:install:mac": "bash scripts/install-mac-app.sh",
+    "rebuild": "npx @electron/rebuild",
+    "rebuild:arm64": "npm_config_arch=arm64 npx @electron/rebuild",
+    "electron:install:mac:arm64": "npm_config_arch=arm64 npm install && npm_config_arch=arm64 npx @electron/rebuild && bash scripts/install-mac-app.sh",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "appId": "com.saminyasar.claudecommandcenterbeta",

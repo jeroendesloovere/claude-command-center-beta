@@ -121,7 +121,7 @@ export default function SkillsPage() {
           key: `${skill.source}:${skill.path}`,
           repositoryUrl,
           githubTreeUrl: getGitHubTreeUrl(repositoryUrl, skill.gitCommit),
-          providers: ['claude', 'codex', 'gemini'].filter((provider) => isSkillInstalledOn(skill.name, provider)),
+          providers: ['claude', 'codex', 'gemini', 'copilot'].filter((provider) => isSkillInstalledOn(skill.name, provider)),
           gitState,
         };
       })
@@ -691,7 +691,7 @@ export default function SkillsPage() {
         open={showInstallTerminal}
         repo={currentInstallRepo}
         title={currentInstallTitle}
-        availableProviders={['claude', 'codex', 'gemini']}
+        availableProviders={['claude', 'codex', 'gemini', 'copilot']}
         onClose={(success) => {
           setShowInstallTerminal(false);
           setInstallingSkill(null);
